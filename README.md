@@ -1,89 +1,55 @@
 # 🎥 RAG Tabanlı Film Öneri Sistemi
 
-> ℹ️ **Proje Hakkında:** Bu çalışma, **Akbank Gen-AI Bootcamp'i** kapsamında, **Global AI Hub** eğitmenleri tarafından verilen bir proje görevi olarak geliştirilmiştir. Bir konsept kanıtlama (Proof of Concept) çalışması olup gelecekteki geliştirmelere açıktır.
+> ℹ️ **Proje Hakkında:** Bu çalışma, **Akbank Generative AI Bootcamp'i** kapsamında, **Global AI Hub** eğitmenleri tarafından verilen bir proje görevi olarak geliştirilmiştir. Bir konsept kanıtlama (Proof of Concept) çalışması olup gelecekteki geliştirmelere açıktır.
 
 Bu proje, RAG (Retrieval-Augmented Generation) tekniğini kullanarak film önerileri sunan bir denemedir. Projenin amacı, filmlerin metinsel verilerini (özet, tema, tür vb.) semantik olarak analiz edip benzerlik tabanlı öneriler sunmaktır.
 
 Ancak, sistem henüz karmaşık doğal dil sorgularını yorumlamada başarılı değildir. En isabetli sonuçlar için, **`"romantic comedy"`**, **`"small town mystery"`** veya **`"space horror"`** gibi belirli tür veya temaları ifade eden kısa anahtar kelimelerle kullanılması tavsiye edilir.
 
------
+---
+
+## 🚀 Projeyi Deneyimleme ve İnceleme
+
+Bu projenin nasıl çalıştığını görmek ve kodlarını incelemek için iki ana yol bulunmaktadır.
+
+### 1. Canlı Demo (Önerilen Yöntem)
+Projenin çalışan halini görmek ve test etmek için en kolay ve hızlı yol, Hugging Face üzerine yüklenmiş olan canlı demoyu kullanmaktır.
+
+- **➡️ [Buradan Canlı Demoya Ulaşabilirsiniz](https://huggingface.co/spaces/etherwa/film_rag)**
+
+### 2. Geliştirme Sürecini İnceleme (Jupyter Notebook)
+Veri setinin nasıl hazırlandığını, modelin nasıl denendiğini ve projenin adımlarını detaylı olarak görmek isterseniz, repodaki `film_rag(1).ipynb` dosyasını inceleyebilirsiniz. Bu dosya, projenin "mutfağını" gösterir ve kodun Google Colab ortamında nasıl geliştirildiğini anlamak için faydalıdır.
+
+### ⚠️ Önemli Not: Yerel Çalıştırma Hakkında
+Bu repodaki `app.py` dosyası, büyük boyutları nedeniyle GitHub'a yüklenmemiş olan veri setlerine ihtiyaç duymaktadır. Bu yüzden, **repoyu indirip doğrudan `python app.py` komutuyla çalıştırmayı denemek hata verecektir.** Projenin çalıştırılması yalnızca yukarıda linki verilen Hugging Face'teki demo üzerinden mümkündür.
+
+---
 
 ## 📊 Veri Seti Hakkında
 
-  - **Kaynak:** [TMDB 5000 Movies Dataset (Kaggle)](https://www.kaggle.com/datasets/tmdb/tmdb-movie-metadata)
-  - **İçerik:** Film adı, çıkış yılı, özet, tür, anahtar kelimeler, yönetmen/yazar/oyuncu bilgileri, IMDb puanı ve popülerlik.
-  - **Hazırlık Aşamaları:**
-      - JSON benzeri alanlar (`genres`, `keywords`, `cast`, `crew`) ayrıştırıldı.
-      - Yönetmen, yazarlar ve başlıca oyuncular çıkarıldı.
-      - Her film için `açıklama`, `tür`, `anahtar kelimeler` ve `kadro` bilgilerinden oluşan tek bir doküman (`doc`) üretildi.
-      - Bu dokümanlar, embedding modeli ile vektörleştirildi ve **FAISS** ile arama yapılabilir hale getirildi.
+- **Kaynak:** [TMDB 5000 Movies Dataset (Kaggle)](https://www.kaggle.com/datasets/tmdb/tmdb-movie-metadata)
+- **Hazırlık:** Her film için `açıklama`, `tür`, `anahtar kelimeler` ve `kadro` bilgilerinden oluşan tek bir metin dokümanı üretilmiş, bu dokümanlar vektörleştirilerek **FAISS** ile aranabilir hale getirilmiştir.
 
-> **Not:** Veri seti repoya eklenmemiştir. Kod çalıştırıldığında veri otomatik olarak işlenir.
 
-## 🧠 Kullanılan Yöntemler
+## 🧠 Proje Mimarisi
 
-  - **Embedding:** `intfloat/multilingual-e5-small` (Sentence Transformers)
-  - **Vektör Arama:** FAISS (Inner Product Similarity)
-  - **Query İşleme:** Sorgu tipi tespiti, otomatik query expansion, tematik kelime analizi.
-  - **Skorlama:** Semantik benzerlik + IMDb puanı + popülerlik + tür/tema uyumu.
-  - **Arayüz:** Gradio
+* **📁 Veri Toplama** – TMDB veri seti (Kaggle)
+* **🧹 Veri Ön İşleme** – JSON ayrıştırma, `doc` oluşturma
+* **🧠 Embedding** – Sentence Transformers (`intfloat/multilingual-e5-small`)
+* **📚 FAISS** – Vektör arama indeksi oluşturma
+* **🔍 Query İşleme** – Query expansion + filtreleme
+* **⚖️ Skorlama** – Semantik benzerlik + IMDb puanı + popülerlik
+* **🌐 Arayüz** – Gradio ile web tabanlı öneri sistemi
 
-## 🧪 Elde Edilen Sonuçlar
 
-  - `“movies like Interstellar”` tipi sorgularda atmosfer, tema ve anlatı bakımından benzer filmler önerir.
-  - `“romantic comedy”`, `“detective thriller”`, `“space movies”` gibi sorgularda tür & tema filtreleri ile isabet oranı artırılmıştır.
-  - Bazı durumlarda hâlâ alakasız sonuçlar dönebilir, bu sistemin bilinen sınırlamasıdır ve gelecekte geliştirilecektir.
 
-## ⚙️ Çalıştırma Kılavuzu
-
-Önerilen çalıştırma yöntemi `app.py` dosyasıdır.
-
-#### 1\. Sanal Ortam Oluşturma ve Bağımlılıkların Kurulumu
-
-```sh
-# Sanal ortam oluşturun
-python -m venv venv
-
-# Sanal ortamı aktive edin
-# Mac/Linux:
-source venv/bin/activate
-# Windows:
-venv\Scripts\activate
-
-# Gerekli kütüphaneleri yükleyin
-pip install -r requirements.txt
-```
-
-#### 2\. Uygulamayı Çalıştırma
-
-```sh
-python app.py
-```
-
-Bu komutla Gradio arayüzü başlatılır ve tarayıcıda uygulama açılır.
-
-#### 3\. (Opsiyonel) Notebook Sürümü
-
-`film_rag(1).ipynb` dosyası, geliştirme sürecini ve veri hazırlama adımlarını detaylı olarak göstermektedir. Çalıştırılabilir olmak zorunda değildir, ancak incelenebilir olması beklenmektedir.
-
-## 🧱 Çözüm Mimarisi
-
-📁 **Veri Toplama** → 🧹 **Veri Ön İşleme** → 🧠 **Embedding** → 📚 **FAISS İndeksi** → 🔍 **Query İşleme** → ⚖️ **Skorlama** → 🌐 **Arayüz**
-
------
 
 ## 💡 İpuçları ve Bilinen Sınırlamalar
 
-  - **İngilizce Sorgular:** İngilizce sorgular daha isabetli sonuçlar verir. Türkçe sorgular da desteklenir ancak embedding modeli İngilizce'de çok daha başarılıdır.
-  - **Alakasız Sonuçlar:** Bazı sorgularda hâlâ alakasız sonuçlar görülebilir.
-  - **Geliştirme Planı:** Daha iyi sonuçlar için daha büyük embedding modelleri ve bir `reranker` katmanı eklenmesi planlanmaktadır.
-
-## 🔄 Hugging Face’e Geçerken Yapılan Değişiklikler
-
-  - Kaggle’dan veri çekme işlemi yerine CSV dosyaları doğrudan repoya eklendi.
-  - Sorgu genişletme ve filtreleme mantığı iyileştirildi.
-  - Kod yapısı tek dosyada (`app.py`) çalışacak şekilde sadeleştirildi.
+- **İngilizce Sorgular:** Embedding modelinin doğası gereği, İngilizce sorgular Türkçe sorgulara göre daha isabetli sonuçlar vermektedir.
+- **Geliştirme Planı:** Gelecekte daha büyük embedding modelleri ve bir `reranker` katmanı eklenerek sistemin isabet oranı artırılabilir.
 
 ## 🔗 Bağlantılar
 
-  - **💻 Canlı Demo:** [Hugging Face Spaces](https://huggingface.co/spaces/etherwa/film_rag)
+- **💻 Canlı Demo:** [https://huggingface.co/spaces/etherwa/film_rag](https://huggingface.co/spaces/etherwa/film_rag)
+
