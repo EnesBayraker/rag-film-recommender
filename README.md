@@ -22,6 +22,7 @@ Bu dokümanlar embedding modeli ile vektörleştirildi ve FAISS ile arama yapıl
 
 Veri seti repoya eklenmemiştir. Kod çalıştırıldığında veri otomatik olarak işlenir.
 
+
 🧠 Kullanılan Yöntemler
 
 Embedding: intfloat/multilingual-e5-small (Sentence Transformers)
@@ -34,6 +35,7 @@ Skorlama: Semantik benzerlik + IMDb puanı + popülerlik + tür/tema uyumu
 
 Arayüz: Gradio
 
+
 🧪 Elde Edilen Sonuçlar
 
 “movies like Interstellar” tipi sorgularda atmosfer, tema ve anlatı bakımından benzer filmler önerir.
@@ -41,6 +43,7 @@ Arayüz: Gradio
 “romantic comedy”, “detective thriller”, “space movies” gibi sorgularda tür & tema filtreleri ile isabet oranı artırılmıştır.
 
 Bazı durumlarda hâlâ alakasız sonuçlar dönebilir, bu sistemin bilinen sınırlamasıdır ve gelecekte geliştirilecektir.
+
 
 ⚙️ Çalıştırma Kılavuzu (Önerilen: app.py – Hugging Face Versiyonu)
 🔹 1) Sanal ortam oluşturma ve bağımlılıkların kurulumu
@@ -59,37 +62,22 @@ Bu komutla Gradio arayüzü başlatılır ve tarayıcıda uygulama açılır. Bu
 
 film_rag(1).ipynb dosyası, geliştirme sürecini ve veri hazırlama adımlarını detaylı olarak göstermektedir. Çalıştırılabilir olmak zorunda değildir, ancak incelenebilir olması beklenmektedir.
 
+
 🧱 Çözüm Mimarisi
-📁 Veri (TMDB / Kaggle)
-      ↓
-🧹 Ön İşleme & Doküman oluşturma
-      ↓
-🔎 Embedding (E5-small)
-      ↓
-📚 FAISS Vektör İndeksi
-      ↓
-🤖 Query Analizi & Expansion
-      ↓
-⚖️ Tür/tema filtreleme + Skor hesaplama
-      ↓
-🌐 Gradio Arayüzü
+
+1. 📁 Veri Toplama – TMDB veri seti (Kaggle)
+2. 🧹 Veri Ön İşleme – JSON ayrıştırma, doc oluşturma
+3. 🧠 Embedding – Sentence Transformers (E5-small)
+4. 📚 FAISS – Vektör arama indeksi oluşturma
+5. 🔍 Query İşleme – Query expansion + filtreleme
+6. ⚖️ Skorlama – Benzerlik + IMDb + Popülerlik
+7. 🌐 Arayüz – Gradio ile öneri sistemi
+
 
 🌐 Web Arayüzü & Ürün Kılavuzu
 
-Canlı demo (Hugging Face Spaces):
-👉 🎬 Film Öneri Sistemi - Live Demo
-
-Kullanım örnekleri:
-
-romantic comedy
-
-detective thriller
-
-movies like Interstellar
-
-post-apocalyptic emotional dramas
-
 💡 İpucu: İngilizce sorgular daha isabetli sonuçlar verir. Türkçe sorgular da desteklenir ancak embedding modeli İngilizce’de çok daha başarılıdır.
+
 
 📉 Sınırlamalar ve Geliştirme Planı
 
@@ -99,6 +87,7 @@ Daha iyi sonuçlar için daha büyük embedding modelleri ve reranker katmanı p
 
 Kullanıcı etkileşimine göre kişiselleştirme özelliği gelecekte eklenecektir.
 
+
 🔄 Hugging Face’e Geçerken Yapılan Küçük Değişiklikler
 
 Kaggle’dan veri çekme işlemi yerine CSV dosyaları doğrudan repoya eklendi.
@@ -106,6 +95,7 @@ Kaggle’dan veri çekme işlemi yerine CSV dosyaları doğrudan repoya eklendi.
 Sorgu genişletme ve filtreleme mantığı iyileştirildi.
 
 Kod yapısı tek dosyada (app.py) çalışacak şekilde sadeleştirildi.
+
 
 🔗 Bağlantılar
 
