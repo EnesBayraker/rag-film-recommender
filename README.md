@@ -20,8 +20,10 @@ Projenin çalışan halini görmek ve test etmek için en kolay ve hızlı yol, 
 ### 2. Geliştirme Sürecini İnceleme (Jupyter Notebook)
 Veri setinin nasıl hazırlandığını, modelin nasıl denendiğini ve projenin adımlarını detaylı olarak görmek isterseniz, repodaki `film_rag(1).ipynb` dosyasını inceleyebilirsiniz. Bu dosya, projenin "mutfağını" gösterir ve kodun Google Colab ortamında nasıl geliştirildiğini anlamak için faydalıdır.
 
-### ⚠️ Önemli Not: Yerel Çalıştırma Hakkında
-Bu repodaki `app.py` dosyası, büyük boyutları nedeniyle GitHub'a yüklenmemiş olan veri setlerine ihtiyaç duymaktadır. Bu yüzden, **repoyu indirip doğrudan `python app.py` komutuyla çalıştırmayı denemek hata verecektir.** Projenin çalıştırılması yalnızca yukarıda linki verilen Hugging Face'teki demo üzerinden mümkündür.
+### ⚠️ Önemli Not: Dosya Yapısı ve Yerel Çalıştırma
+Bu GitHub reposu, projenin ana kodlarını ve geliştirme notlarını içerir. Ancak, uygulamanın çalışması için gereken veri setleri (tmdb_5000_credits.csv, tmdb_5000_movies.csv) ve Python kütüphanelerinin listesi (requirements.txt) doğrudan Hugging Face Space reposunda bulunmaktadır.
+Bu nedenle, bu GitHub reposunu indirip yerel olarak çalıştırmak hata verecektir. Projeyi test etmek için lütfen yukarıdaki canlı demo linkini kullanın.
+
 
 ---
 
